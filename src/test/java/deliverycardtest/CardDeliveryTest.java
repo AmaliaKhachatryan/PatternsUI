@@ -10,21 +10,23 @@ import org.openqa.selenium.Keys;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
+import static datagenerator.DataGenerator.generateDate;
 
 public class CardDeliveryTest {
-    DataGenerator client;
+
     @BeforeEach
     public void setup() {
-        //Configuration.holdBrowserOpen = true;
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        client = DataGenerator.generateClient(3, "ru");
-    }
+   }
 
     @Test
     void changeDeliveryDateTest() {
-       String newDate = DataGenerator.generateDate(5);
+        var client = DataGenerator.generateClient(3, "ru");
+       String newDate = generateDate(5);
         $("[data-test-id='city'] input").setValue(client.getCity());
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id='date'] input").setValue(client.getData());
@@ -37,6 +39,7 @@ public class CardDeliveryTest {
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id='date'] input").setValue(newDate);
         $(byXpath(".//*[contains(@class,'button button_view_extra')]")).click();
+        $(byText("У вас уже запланирована встреча на другую дату. Перепланировать?")).shouldBe(visible);
         $(byXpath(".//*[text()='Перепланировать']")).click();
         $(byXpath(".//*[@class='notification__content']")).shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldHave(exactText("Встреча успешно запланирована на " + newDate));

@@ -19,16 +19,9 @@ public class DataGenerator {
         return new DataGenerator(generateCity(), generateDate(days), generateName(locale), generatePhone(locale));
     }
 
-    public DataGenerator(String city, String data, String name, String phone) {
-        this.city = city;
-        this.data = data;
-        this.name = name;
-        this.phone = phone;
-    }
-
-    public static String generateDate(int days) {
-        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-    }
+      public static String generateDate(int days) {
+          return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+      }
 
     public static String generateCity() {
         var cities = new String[]{
