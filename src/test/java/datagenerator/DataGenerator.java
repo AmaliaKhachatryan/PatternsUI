@@ -10,18 +10,14 @@ import java.util.Random;
 
 @Value
 public class DataGenerator {
-    String city;
-    String data;
-    String name;
-    String phone;
 
-    public static DataGenerator generateClient(int days, String locale) {
-        return new DataGenerator(generateCity(), generateDate(days), generateName(locale), generatePhone(locale));
+    private DataGenerator() {
+
     }
 
-      public static String generateDate(int days) {
-          return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-      }
+    public static String generateDate(int days) {
+        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
 
     public static String generateCity() {
         var cities = new String[]{
@@ -37,6 +33,23 @@ public class DataGenerator {
     public static String generatePhone(String locale) {
         var faker = new Faker(new Locale(locale));
         return faker.phoneNumber().phoneNumber();
+    }
+
+    public static class ClientInfo {
+        private ClientInfo() {
+
+        }
+
+        public static DataClient clientInfo(int days, String locale) {
+            return new DataClient(generateCity(), generateName(locale), generatePhone(locale));
+        }
+    }
+
+    @Value
+    public static class DataClient {
+        String city;
+        String name;
+        String phone;
     }
 }
 
